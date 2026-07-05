@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Job Search Launchpad</title>
+<style>
+  :root{
+    --bg:#10141c;
+    --panel:#171d28;
+    --panel-2:#1d2431;
+    --line:#28303f;
+    --text:#e7ebf2;
+    --muted:#8b95a8;
+    --signal:#ffcb47;      /* Jobs / primary action */
+    --teal:#57d1c4;        /* People */
+    --violet:#a9b4ff;      /* Custom */
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+  .wrap{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+
+  header{margin-bottom:32px}
+  .eyebrow{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:10px;
+  }
+  h1{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:30px;font-weight:600;margin:0;letter-spacing:-.01em;
+  }
+  h1 .dot{color:var(--signal)}
+  .sub{color:var(--muted);margin-top:8px;font-size:15px}
+
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0 8px}
+  button{font:inherit;cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--text);padding:9px 14px;transition:.15s}
+  button:hover{border-color:#3a4557}
+  button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+  .btn-primary{background:var(--signal);color:#1a1300;border-color:var(--signal);font-weight:600}
+  .btn-primary:hover{filter:brightness(1.05)}
+
+  section.group{margin-top:34px}
+  .group-head{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+  .group-head h2{font-size:16px;margin:0;font-weight:600;letter-spacing:.02em}
+  .tag{font-family:ui-monospace,monospace;font-size:11px;padding:2px 8px;border-radius:999px;
+    letter-spacing:.05em;text-transform:uppercase}
+  .tag.jobs{background:rgba(255,203,71,.14);color:var(--signal)}
+  .tag.people{background:rgba(87,209,196,.14);color:var(--teal)}
+  .tag.custom{background:rgba(169,180,255,.14);color:var(--violet)}
+  .count{color:var(--muted);font-size:13px}
+
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;
+  }
+  .card:hover{border-color:#33405a}
+  .card .body{flex:1;min-width:0}
+  .card .label{font-weight:600;font-size:15px}
+  .card .note{color:var(--muted);font-size:13px;margin-top:2px}
+  .card .url{
+    font-family:ui-monospace,monospace;font-size:11.5px;color:#6f7b91;
+    margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .card .actions{display:flex;gap:8px;flex-shrink:0}
+  .icon-btn{padding:8px 12px;font-size:13px}
+  .open{background:var(--signal);color:#1a1300;border-color:var(--signal);font-weight:600;text-decoration:none;
+    display:inline-flex;align-items:center;border-radius:9px;padding:8px 14px}
+  .open:hover{filter:brightness(1.05)}
+  .del{color:var(--muted)}
+  .del:hover{color:#ff8f8f;border-color:#5a2a2a}
+
+  /* add form */
+  .adder{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;margin-top:14px}
+  .adder h3{margin:0 0 14px;font-size:14px;font-weight:600;letter-spacing:.03em}
+  .grid{display:grid;grid-template-columns:150px 1fr;gap:10px}
+  .grid .full{grid-column:1 / -1}
+  label.f{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;letter-spacing:.03em}
+  input,select{width:100%;font:inherit;background:var(--bg);color:var(--text);
+    border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+  input.mono{font-family:ui-monospace,monospace;font-size:13px}
+  input:focus,select:focus{outline:none;border-color:var(--signal)}
+  .adder .row-actions{display:flex;justify-content:flex-end;margin-top:14px}
+
+  /* cheatsheet */
+  .cheat{margin-top:34px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .cheat h3{margin:0 0 12px;font-size:14px;letter-spacing:.03em}
+  .cheat table{width:100%;border-collapse:collapse;font-size:13.5px}
+  .cheat td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  .cheat tr:last-child td{border-bottom:none}
+  .cheat td:first-child{font-family:ui-monospace,monospace;color:var(--signal);white-space:nowrap;width:110px}
+  .cheat code{font-family:ui-monospace,monospace;background:var(--panel-2);padding:1px 6px;border-radius:5px;color:var(--text)}
+
+  .empty{color:var(--muted);font-size:14px;padding:10px 2px}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    padding:10px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.2s}
+  .toast.show{opacity:1}
+  input[type=file]{display:none}
+  @media(max-width:620px){
+    .grid{grid-template-columns:1fr}
+    .card .url{display:none}
+    .card{flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">linkedin search launchpad</div>
+    <h1>Job Search Links<span class="dot">.</span></h1>
+    <div class="sub">Pre-filtered searches, one click each. Add your own — they save in this browser.</div>
+    <div class="toolbar">
+      <button class="btn-primary" onclick="openAllJobs()">Open all job searches</button>
+      <button onclick="doExport()">Export</button>
+      <button onclick="document.getElementById('importFile').click()">Import</button>
+      <input type="file" id="importFile" accept="application/json" onchange="doImport(event)">
+      <button onclick="resetSeed()">Reset to defaults</button>
+    </div>
+  </header>
+
+  <div id="groups"></div>
+
+  <div class="adder">
+    <h3>Add a link</h3>
+    <div class="grid">
+      <div>
+        <label class="f" for="cat">Category</label>
+        <select id="cat">
+          <option>Jobs</option>
+          <option>People</option>
+          <option>Custom</option>
+        </select>
+      </div>
+      <div>
+        <label class="f" for="label">Label</label>
+        <input id="label" placeholder="e.g. Data Scientist — Berlin, remote">
+      </div>
+      <div class="full">
+        <label class="f" for="note">Note <span style="opacity:.6">(optional)</span></label>
+        <input id="note" placeholder="e.g. checks EU Blue Card eligible roles">
+      </div>
+      <div class="full">
+        <label class="f" for="url">URL</label>
+        <input id="url" class="mono" placeholder="https://www.linkedin.com/jobs/search/?...">
+      </div>
+    </div>
+    <div class="row-actions">
+      <button class="btn-primary" onclick="addLink()">Add link</button>
+    </div>
+  </div>
+
+  <div class="cheat">
+    <h3>URL cheat sheet — edit any link by hand</h3>
+    <table>
+      <tr><td>f_WT</td><td>Work type: <code>1</code> on-site · <code>2</code> remote · <code>3</code> hybrid. Stack with commas — <code>f_WT=2,3</code>.</td></tr>
+      <tr><td>f_TPR</td><td>Date posted: <code>r86400</code> 24h · <code>r604800</code> week · <code>r2592000</code> month.</td></tr>
+      <tr><td>sortBy</td><td><code>DD</code> newest first · <code>R</code> relevance.</td></tr>
+      <tr><td>keywords</td><td>Narrow the role — <code>Data%20Scientist%20Pricing</code>, <code>...%20Experimentation</code>. <code>%20</code> = space.</td></tr>
+      <tr><td>location</td><td>Country, city, or region name, URL-encoded. People filters (past/current company, school) are best set from LinkedIn's dropdown bar, not the URL.</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SEED = [
+  {category:"Jobs",   label:"Data Scientist — Europe (EEA)",        note:"Whole European Economic Area, newest first", url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=European%20Economic%20Area&f_TPR=r86400&sortBy=DD"},
+  {category:"Jobs",   label:"Data Scientist — India, remote",       note:"Remote roles only (f_WT=2)",                 url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=India&f_WT=2&f_TPR=r86400&sortBy=DD"},
+  {category:"Jobs",   label:"Data Scientist — US, all",             note:"Usually implies US work authorization",      url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=United%20States&f_TPR=r86400&sortBy=DD"},
+  {category:"Jobs",   label:"Data Scientist — US, remote",          note:"Often remote-within-US only — check listing", url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=United%20States&f_WT=2&f_TPR=r86400&sortBy=DD"},
+  {category:"Jobs",   label:"Data Scientist — Dublin",              note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=Dublin%2C%20County%20Dublin%2C%20Ireland&f_TPR=r86400&sortBy=DD"},
+  {category:"Jobs",   label:"Data Scientist — Ireland, all",        note:"Whole country — catches Cork/Galway too",    url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=Ireland&f_TPR=r86400&sortBy=DD"},
+  {category:"Jobs",   label:"Data Scientist — Ireland, remote",     note:"Remote roles only",                          url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=Ireland&f_WT=2&f_TPR=r86400&sortBy=DD"},
+  {category:"Jobs",   label:"Data Analytics — Tallinn / Estonia",   note:"geoId 104199723 · cleaned of session params", url:"https://www.linkedin.com/jobs/search/?keywords=data%20analytics&geoId=104199723&f_TPR=r86400&sortBy=DD"},
+  {category:"People", label:"Ex-Bolt data scientists",              note:"For warm referrals — add a Current company filter",  url:"https://www.linkedin.com/search/results/people/?keywords=data%20scientist&origin=FACETED_SEARCH&pastCompany=%5B%2235626123%22%2C%2210877408%22%2C%221815218%22%5D"},
+  {category:"People", label:"Indian DS by school (NIT/IIT)",        note:"Set School in the filter bar",               url:"https://www.linkedin.com/search/results/people/?keywords=data%20scientist"}
+];
+
+const KEY = "jobSearchLinks.v1";
+const ORDER = ["Jobs","People","Custom"];
+
+function load(){
+  try{ const s = localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){}
+  return SEED.slice();
+}
+function save(list){
+  try{ localStorage.setItem(KEY, JSON.stringify(list)); }
+  catch(e){ toast("Couldn't save — storage blocked. Use Export to keep a copy."); }
+}
+let links = load();
+
+function render(){
+  const root = document.getElementById("groups");
+  root.innerHTML = "";
+  const cats = [...new Set([...ORDER, ...links.map(l=>l.category)])];
+  let any = false;
+  cats.forEach(cat=>{
+    const items = links.filter(l=>l.category===cat);
+    if(!items.length) return;
+    any = true;
+    const sec = document.createElement("section");
+    sec.className = "group";
+    const tagClass = cat==="Jobs"?"jobs":cat==="People"?"people":"custom";
+    sec.innerHTML = `<div class="group-head">
+        <span class="tag ${tagClass}">${escapeHtml(cat)}</span>
+        <h2>${cat==="People"?"Referral searches":cat==="Jobs"?"Job searches":escapeHtml(cat)}</h2>
+        <span class="count">${items.length}</span>
+      </div>`;
+    items.forEach(l=>{
+      const i = links.indexOf(l);
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="body">
+          <div class="label">${escapeHtml(l.label)}</div>
+          ${l.note?`<div class="note">${escapeHtml(l.note)}</div>`:""}
+          <div class="url">${escapeHtml(l.url)}</div>
+        </div>
+        <div class="actions">
+          <a class="open" href="${escapeAttr(l.url)}" target="_blank" rel="noopener">Open ↗</a>
+          <button class="icon-btn" title="Copy URL">Copy</button>
+          <button class="icon-btn del" title="Remove">✕</button>
+        </div>`;
+      card.querySelector(".icon-btn:not(.del)").onclick = ()=>copy(l.url);
+      card.querySelector(".del").onclick = ()=>remove(i);
+      sec.appendChild(card);
+    });
+    root.appendChild(sec);
+  });
+  if(!any) root.innerHTML = `<div class="empty">No links yet. Add one below, or hit “Reset to defaults”.</div>`;
+}
+
+function addLink(){
+  const category = document.getElementById("cat").value;
+  const label = document.getElementById("label").value.trim();
+  const note = document.getElementById("note").value.trim();
+  const url = document.getElementById("url").value.trim();
+  if(!label || !url){ toast("Need at least a label and a URL."); return; }
+  if(!/^https?:\/\//i.test(url)){ toast("URL should start with http:// or https://"); return; }
+  links.push({category,label,note,url});
+  save(links); render();
+  document.getElementById("label").value="";
+  document.getElementById("note").value="";
+  document.getElementById("url").value="";
+  toast("Added.");
+}
+function remove(i){ links.splice(i,1); save(links); render(); toast("Removed."); }
+function resetSeed(){ links = SEED.slice(); save(links); render(); toast("Reset to defaults."); }
+
+function openAllJobs(){
+  const jobs = links.filter(l=>l.category==="Jobs");
+  if(!jobs.length){ toast("No job searches to open."); return; }
+  jobs.forEach(l=>window.open(l.url,"_blank","noopener"));
+}
+
+function doExport(){
+  const blob = new Blob([JSON.stringify(links,null,2)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "job-search-links.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast("Exported job-search-links.json");
+}
+function doImport(ev){
+  const file = ev.target.files[0]; if(!file) return;
+  const r = new FileReader();
+  r.onload = ()=>{
+    try{
+      const data = JSON.parse(r.result);
+      if(!Array.isArray(data)) throw new Error();
+      links = data.filter(x=>x&&x.label&&x.url).map(x=>({
+        category:x.category||"Custom", label:x.label, note:x.note||"", url:x.url
+      }));
+      save(links); render(); toast("Imported "+links.length+" links.");
+    }catch(e){ toast("That file wasn't valid link JSON."); }
+    ev.target.value="";
+  };
+  r.readAsText(file);
+}
+
+function copy(text){
+  navigator.clipboard?.writeText(text).then(()=>toast("Copied URL."),()=>fallbackCopy(text));
+}
+function fallbackCopy(text){
+  const t=document.createElement("textarea");t.value=text;document.body.appendChild(t);
+  t.select();try{document.execCommand("copy");toast("Copied URL.");}catch(e){}t.remove();
+}
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),1800);
+}
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function escapeAttr(s){return escapeHtml(s).replace(/'/g,"&#39;");}
+
+render();
+</script>
+</body>
+</html>
