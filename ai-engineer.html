@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Job Search Launchpad</title>
+<title>AI Engineer Search Launchpad</title>
 <style>
   :root{
     --bg:#10141c;
@@ -12,8 +12,8 @@
     --line:#28303f;
     --text:#e7ebf2;
     --muted:#8b95a8;
-    --signal:#ffcb47;      /* Jobs / primary action */
-    --signal-ink:#1a1300;  /* text on top of --signal */
+    --signal:#5b9dff;      /* Jobs / primary action */
+    --signal-ink:#061229;  /* text on top of --signal */
     --teal:#57d1c4;        /* People */
     --violet:#a9b4ff;      /* Custom */
   }
@@ -65,7 +65,7 @@
   .group-head h2{font-size:16px;margin:0;font-weight:600;letter-spacing:.02em}
   .tag{font-family:ui-monospace,monospace;font-size:11px;padding:2px 8px;border-radius:999px;
     letter-spacing:.05em;text-transform:uppercase}
-  .tag.jobs{background:rgba(255,203,71,.14);color:var(--signal)}
+  .tag.jobs{background:rgba(91,157,255,.16);color:var(--signal)}
   .tag.people{background:rgba(87,209,196,.14);color:var(--teal)}
   .tag.custom{background:rgba(169,180,255,.14);color:var(--violet)}
   .count{color:var(--muted);font-size:13px}
@@ -127,12 +127,12 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">linkedin search launchpad · data scientist</div>
-    <h1>Job Search Links<span class="dot">.</span></h1>
+    <div class="eyebrow">linkedin search launchpad · ai engineer</div>
+    <h1>AI Engineer Links<span class="dot">.</span></h1>
     <div class="sub">Pre-filtered searches, one click each. Add your own — they save in this browser.</div>
     <div class="role-nav">
-      <a class="role-tab active" href="index.html">Data Scientist</a>
-      <a class="role-tab" href="ai-engineer.html">AI Engineer</a>
+      <a class="role-tab" href="index.html">Data Scientist</a>
+      <a class="role-tab active" href="ai-engineer.html">AI Engineer</a>
     </div>
     <div class="toolbar">
       <button class="btn-primary" onclick="openAllJobs()">Open all job searches</button>
@@ -158,7 +158,7 @@
       </div>
       <div>
         <label class="f" for="label">Label</label>
-        <input id="label" placeholder="e.g. Data Scientist — Berlin, remote">
+        <input id="label" placeholder="e.g. AI Engineer — Berlin, remote">
       </div>
       <div class="full">
         <label class="f" for="note">Note <span style="opacity:.6">(optional)</span></label>
@@ -180,7 +180,7 @@
       <tr><td>f_WT</td><td>Work type: <code>1</code> on-site · <code>2</code> remote · <code>3</code> hybrid. Stack with commas — <code>f_WT=2,3</code>.</td></tr>
       <tr><td>f_TPR</td><td>Date posted: <code>r604800</code> week (default here) · <code>r86400</code> 24h · <code>r2592000</code> month.</td></tr>
       <tr><td>sortBy</td><td><code>DD</code> newest first · <code>R</code> relevance.</td></tr>
-      <tr><td>keywords</td><td>Narrow the role — <code>Data%20Scientist%20Pricing</code>, <code>...%20Experimentation</code>. <code>%20</code> = space.</td></tr>
+      <tr><td>keywords</td><td>Narrow the role — <code>AI%20Engineer%20LLM</code>, <code>...%20MLOps</code>. <code>%20</code> = space.</td></tr>
       <tr><td>location</td><td>Country, city, or region name, URL-encoded. People filters (past/current company, school) are best set from LinkedIn's dropdown bar, not the URL.</td></tr>
     </table>
   </div>
@@ -190,23 +190,22 @@
 
 <script>
 const SEED = [
-  {category:"Jobs",   label:"Data Scientist — Europe (EEA)",        note:"Whole European Economic Area, newest first", url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=European%20Economic%20Area&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"Data Scientist — Europe, remote",      note:"Remote roles only (f_WT=2)",                 url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=European%20Economic%20Area&f_WT=2&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"Data Scientist — India, remote",       note:"Remote roles only (f_WT=2)",                 url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=India&f_WT=2&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"Data Scientist — US, all",             note:"Usually implies US work authorization",      url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=United%20States&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"Data Scientist — US, remote",          note:"Often remote-within-US only — check listing", url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=United%20States&f_WT=2&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"Data Scientist — Dublin",              note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=Dublin%2C%20County%20Dublin%2C%20Ireland&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"Data Scientist — Ireland, all",        note:"Whole country — catches Cork/Galway too",    url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=Ireland&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"Data Scientist — Ireland, remote",     note:"Remote roles only",                          url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=Ireland&f_WT=2&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"Data Analytics — Tallinn / Estonia",   note:"geoId 104199723 · cleaned of session params", url:"https://www.linkedin.com/jobs/search/?keywords=data%20analytics&geoId=104199723&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"Data Scientist — Hyderabad",           note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=Hyderabad%2C%20Telangana%2C%20India&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"Data Scientist — Bangalore",           note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Scientist&location=Bengaluru%2C%20Karnataka%2C%20India&f_TPR=r604800&sortBy=DD"},
-  {category:"People", label:"Ex-Bolt data scientists",              note:"For warm referrals — add a Current company filter",  url:"https://www.linkedin.com/search/results/people/?keywords=data%20scientist&origin=FACETED_SEARCH&pastCompany=%5B%2235626123%22%2C%2210877408%22%2C%221815218%22%5D"},
-  {category:"People", label:"Indian DS by school (NIT/IIT)",        note:"Set School in the filter bar",               url:"https://www.linkedin.com/search/results/people/?keywords=data%20scientist"},
-  {category:"Custom", label:"Data Science — Germany",               note:"Whole country, newest first",                url:"https://www.linkedin.com/jobs/search/?keywords=Data%20Science&location=Germany&f_TPR=r604800&sortBy=DD"}
+  {category:"Jobs",   label:"AI Engineer — Europe (EEA)",           note:"Whole European Economic Area, newest first", url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=European%20Economic%20Area&f_TPR=r604800&sortBy=DD"},
+  {category:"Jobs",   label:"AI Engineer — Europe, remote",         note:"Remote roles only (f_WT=2)",                 url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=European%20Economic%20Area&f_WT=2&f_TPR=r604800&sortBy=DD"},
+  {category:"Jobs",   label:"AI Engineer — India, remote",          note:"Remote roles only (f_WT=2)",                 url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=India&f_WT=2&f_TPR=r604800&sortBy=DD"},
+  {category:"Jobs",   label:"AI Engineer — US, all",                note:"Usually implies US work authorization",      url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=United%20States&f_TPR=r604800&sortBy=DD"},
+  {category:"Jobs",   label:"AI Engineer — US, remote",             note:"Often remote-within-US only — check listing", url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=United%20States&f_WT=2&f_TPR=r604800&sortBy=DD"},
+  {category:"Jobs",   label:"AI Engineer — Dublin",                 note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Dublin%2C%20County%20Dublin%2C%20Ireland&f_TPR=r604800&sortBy=DD"},
+  {category:"Jobs",   label:"AI Engineer — Ireland, all",           note:"Whole country — catches Cork/Galway too",    url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Ireland&f_TPR=r604800&sortBy=DD"},
+  {category:"Jobs",   label:"AI Engineer — Ireland, remote",        note:"Remote roles only",                          url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Ireland&f_WT=2&f_TPR=r604800&sortBy=DD"},
+  {category:"Jobs",   label:"AI Engineer — Hyderabad",              note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Hyderabad%2C%20Telangana%2C%20India&f_TPR=r604800&sortBy=DD"},
+  {category:"Jobs",   label:"AI Engineer — Bangalore",              note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Bengaluru%2C%20Karnataka%2C%20India&f_TPR=r604800&sortBy=DD"},
+  {category:"People", label:"Ex-Bolt AI engineers",                 note:"For warm referrals — add a Current company filter",  url:"https://www.linkedin.com/search/results/people/?keywords=AI%20engineer&origin=FACETED_SEARCH&pastCompany=%5B%2235626123%22%2C%2210877408%22%2C%221815218%22%5D"},
+  {category:"People", label:"Indian AI engineers by school (NIT/IIT)", note:"Set School in the filter bar",             url:"https://www.linkedin.com/search/results/people/?keywords=AI%20engineer"},
+  {category:"Custom", label:"AI Engineering — Germany",             note:"Whole country, newest first",                url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Germany&f_TPR=r604800&sortBy=DD"}
 ];
 
-const KEY = "jobSearchLinks.v1";
+const KEY = "aiEngineerLinks.v1";
 const ORDER = ["Jobs","People","Custom"];
 
 function load(){
@@ -287,10 +286,10 @@ function doExport(){
   const blob = new Blob([JSON.stringify(links,null,2)],{type:"application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "job-search-links.json";
+  a.download = "ai-engineer-links.json";
   a.click();
   URL.revokeObjectURL(a.href);
-  toast("Exported job-search-links.json");
+  toast("Exported ai-engineer-links.json");
 }
 function doImport(ev){
   const file = ev.target.files[0]; if(!file) return;
