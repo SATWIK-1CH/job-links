@@ -180,7 +180,7 @@
       <tr><td>f_WT</td><td>Work type: <code>1</code> on-site · <code>2</code> remote · <code>3</code> hybrid. Stack with commas — <code>f_WT=2,3</code>.</td></tr>
       <tr><td>f_TPR</td><td>Date posted: <code>r604800</code> week (default here) · <code>r86400</code> 24h · <code>r2592000</code> month.</td></tr>
       <tr><td>f_E</td><td>Experience level: <code>2</code> entry · <code>3</code> associate · <code>4</code> mid-senior (default here) · <code>5</code> director. Stack with commas — <code>f_E=3,4</code>.</td></tr>
-      <tr><td>sortBy</td><td><code>DD</code> newest first · <code>R</code> relevance.</td></tr>
+      <tr><td>sortBy</td><td><code>R</code> relevance (default here) · <code>DD</code> newest first.</td></tr>
       <tr><td>keywords</td><td>Narrow the role — <code>AI%20Engineer%20LLM</code>, <code>...%20MLOps</code>. <code>%20</code> = space.</td></tr>
       <tr><td>location</td><td>Country, city, or region name, URL-encoded. People filters (past/current company, school) are best set from LinkedIn's dropdown bar, not the URL.</td></tr>
     </table>
@@ -191,19 +191,19 @@
 
 <script>
 const SEED = [
-  {category:"Jobs",   label:"AI Engineer — Europe (EEA)",           note:"Whole European Economic Area, newest first", url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=European%20Economic%20Area&f_E=4&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"AI Engineer — Europe, remote",         note:"Remote roles only (f_WT=2)",                 url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=European%20Economic%20Area&f_WT=2&f_E=4&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"AI Engineer — India, remote",          note:"Remote roles only (f_WT=2)",                 url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=India&f_WT=2&f_E=4&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"AI Engineer — US, all",                note:"Usually implies US work authorization",      url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=United%20States&f_E=4&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"AI Engineer — US, remote",             note:"Often remote-within-US only — check listing", url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=United%20States&f_WT=2&f_E=4&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"AI Engineer — Dublin",                 note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Dublin%2C%20County%20Dublin%2C%20Ireland&f_E=4&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"AI Engineer — Ireland, all",           note:"Whole country — catches Cork/Galway too",    url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Ireland&f_E=4&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"AI Engineer — Ireland, remote",        note:"Remote roles only",                          url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Ireland&f_WT=2&f_E=4&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"AI Engineer — Hyderabad",              note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Hyderabad%2C%20Telangana%2C%20India&f_E=4&f_TPR=r604800&sortBy=DD"},
-  {category:"Jobs",   label:"AI Engineer — Bangalore",              note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Bengaluru%2C%20Karnataka%2C%20India&f_E=4&f_TPR=r604800&sortBy=DD"},
+  {category:"Jobs",   label:"AI Engineer — Europe (EEA)",           note:"Whole European Economic Area, most relevant first", url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=European%20Economic%20Area&f_E=4&f_TPR=r604800&sortBy=R"},
+  {category:"Jobs",   label:"AI Engineer — Europe, remote",         note:"Remote roles only (f_WT=2)",                 url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=European%20Economic%20Area&f_WT=2&f_E=4&f_TPR=r604800&sortBy=R"},
+  {category:"Jobs",   label:"AI Engineer — India, remote",          note:"Remote roles only (f_WT=2)",                 url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=India&f_WT=2&f_E=4&f_TPR=r604800&sortBy=R"},
+  {category:"Jobs",   label:"AI Engineer — US, all",                note:"Usually implies US work authorization",      url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=United%20States&f_E=4&f_TPR=r604800&sortBy=R"},
+  {category:"Jobs",   label:"AI Engineer — US, remote",             note:"Often remote-within-US only — check listing", url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=United%20States&f_WT=2&f_E=4&f_TPR=r604800&sortBy=R"},
+  {category:"Jobs",   label:"AI Engineer — Dublin",                 note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Dublin%2C%20County%20Dublin%2C%20Ireland&f_E=4&f_TPR=r604800&sortBy=R"},
+  {category:"Jobs",   label:"AI Engineer — Ireland, all",           note:"Whole country — catches Cork/Galway too",    url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Ireland&f_E=4&f_TPR=r604800&sortBy=R"},
+  {category:"Jobs",   label:"AI Engineer — Ireland, remote",        note:"Remote roles only",                          url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Ireland&f_WT=2&f_E=4&f_TPR=r604800&sortBy=R"},
+  {category:"Jobs",   label:"AI Engineer — Hyderabad",              note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Hyderabad%2C%20Telangana%2C%20India&f_E=4&f_TPR=r604800&sortBy=R"},
+  {category:"Jobs",   label:"AI Engineer — Bangalore",              note:"City-scoped",                                url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Bengaluru%2C%20Karnataka%2C%20India&f_E=4&f_TPR=r604800&sortBy=R"},
   {category:"People", label:"Ex-Bolt AI engineers",                 note:"For warm referrals — add a Current company filter",  url:"https://www.linkedin.com/search/results/people/?keywords=AI%20engineer&origin=FACETED_SEARCH&pastCompany=%5B%2235626123%22%2C%2210877408%22%2C%221815218%22%5D"},
   {category:"People", label:"Indian AI engineers by school (NIT/IIT)", note:"Set School in the filter bar",             url:"https://www.linkedin.com/search/results/people/?keywords=AI%20engineer"},
-  {category:"Custom", label:"AI Engineering — Germany",             note:"Whole country, newest first",                url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Germany&f_E=4&f_TPR=r604800&sortBy=DD"}
+  {category:"Custom", label:"AI Engineering — Germany",             note:"Whole country, most relevant first",                url:"https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&location=Germany&f_E=4&f_TPR=r604800&sortBy=R"}
 ];
 
 const KEY = "aiEngineerLinks.v1";
